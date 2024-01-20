@@ -34,6 +34,8 @@ urlpatterns = [
     path('auth/',           include('authentication.urls'), name = 'auth'),
     path('social_auth/',    include('social_auth.urls'),    name="social_auth"),
     path('institution/',    include('institution.urls'),    name="institution"),
+    path('transaction/', include('transaction.urls')),
+    path('trip/', include('trip.urls')),
 ]
 
 

@@ -153,8 +153,8 @@ INSTALLED_APPS = [
     'authentication',
     'social_auth',
     'institution',
-    # 'transaction.apps.TransactionConfig',
-    # 'trip.apps.TripConfig',
+    'transaction.apps.TransactionConfig',
+    'trip.apps.TripConfig',
 
 ]
 # endregion APPS

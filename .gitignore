@@ -15,3 +15,8 @@
 
 /trip/migrations/
 /trip/__pycache__/
+
+/institution/migrations/
+/institution/__pycache__/
+
+
