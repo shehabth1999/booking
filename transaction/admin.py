@@ -1,5 +1,5 @@
 from django.contrib import admin
-from book.models import Transaction as model
+from transaction.models import Transaction as model
 
 @admin.register(model)
 class ModelAdmin(admin.ModelAdmin):

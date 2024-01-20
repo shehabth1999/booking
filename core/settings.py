@@ -153,6 +153,8 @@ INSTALLED_APPS = [
     'authentication',
     'social_auth',
     'institution',
+    # 'transaction.apps.TransactionConfig',
+    # 'trip.apps.TripConfig',
 
 ]
 # endregion APPS
@@ -332,24 +334,24 @@ TEMPLATES = [
 # }
 
 # POSTGRES ---------------------------------------------
-# DATABASES = {
-#     'default': {
-#         'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
-#         'NAME'      : 'soliel',
-#         'USER'      : 'root',
-#         'PASSWORD'  : 'm195825735',
-#         'HOST'      : 'localhost',
-#         'PORT'      : '5432',
-#     }
-# }
-
-# SQLITE ---------------------------------------------
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
+        'NAME'      : 'trip',
+        'USER'      : 'postgres',
+        'PASSWORD'  : '7410',
+        'HOST'      : 'localhost',
+        'PORT'      : '5432',
     }
 }
+
+# SQLITE ---------------------------------------------
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 # endregion Database
 
 # region Test
