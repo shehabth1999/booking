@@ -3,19 +3,25 @@
 from pathlib import Path
 import os,datetime,sys
 # endregion 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # region Networking
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#2+kf%!ig^*rfz4p@%ox+ir)e&aqnil6%nrj%9hb1du)8u=z!d'
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = ['soleilacademy.herokuapp.com','127.0.0.1']
 INTERNAL_IPS = [ '127.0.0.1',]
 ROOT_URLCONF = 'core.urls'
 WSGI_APPLICATION = 'core.wsgi.application'
 SITE_ID = 1
 AUTH_USER_MODEL = 'authentication.User'
-#CORS_ALLOW_ALL_ORIGINS= True
+CORS_ALLOW_ALL_ORIGINS= True
 # endregion Networking
+
+
 
 # region Internationalization
 LANGUAGE_CODE   = 'en-us'               # 'ar'
@@ -44,8 +50,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # endregion Email
 
 # region API Settings
@@ -53,11 +59,13 @@ REST_FRAMEWORK = {
     # handel errors
     'NON_FIELD_ERRORS_KEY': 'error',
     'EXCEPTION_HANDLER': 'core.utils.exceptions.custom_exception_handler',
+    
 
 
     # pagination
-    'PAGE_SIZE':100,
+    'PAGE_SIZE':10,
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     
     # Default Authentication
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -153,8 +161,10 @@ INSTALLED_APPS = [
     'authentication',
     'social_auth',
     'institution',
-    'transaction.apps.TransactionConfig',
-    'trip.apps.TripConfig',
+    # 'transaction.apps.TransactionConfig',
+    # 'trip.apps.TripConfig',
+    'transaction',
+    'trip',
 
 ]
 # endregion APPS
@@ -282,6 +292,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 TEMPLATES = [
@@ -334,7 +345,7 @@ TEMPLATES = [
 # }
 
 # POSTGRES ---------------------------------------------
-DATABASES = {
+DATABASE_RELEASE = {
     'default': {
         'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
         'NAME'      : 'trip',
@@ -342,16 +353,36 @@ DATABASES = {
         'PASSWORD'  : '7410',
         'HOST'      : 'localhost',
         'PORT'      : '5432',
+        'TEST': {
+             'MIRROR': 'default',
+        },
+    },
+    'second': {
+        'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
+        'NAME'      : 'trip',
+        'USER'      : 'postgres',
+        'PASSWORD'  : '7410',
+        'HOST'      : 'localhost',
+        'PORT'      : '5432',
+        'TEST': {
+             'MIRROR': 'default',
+        },
     }
 }
 
 # SQLITE ---------------------------------------------
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES_DEPUG = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'TEST': {
+             'MIRROR': 'default',
+        },
+    }
+}
+
+DATABASE = DEBUG if DATABASES_DEPUG else DATABASE_RELEASE 
+
 # endregion Database
 
 # region Test
@@ -370,3 +401,4 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 ]
 # endregion CORS WHITELIST
 
+EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'

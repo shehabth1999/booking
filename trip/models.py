@@ -6,7 +6,7 @@ from datetime import timedelta
 class Area(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, unique=True)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, null = True)
     search_fields = [
        'name',
     ]
@@ -95,7 +95,4 @@ class Trip(models.Model):
         date_range = (start_date, end_date + timedelta(days=1))
         return cls.objects.filter(start_time__range=date_range, end_time__range=date_range).order_by('start_time')
     
-    
-    
-
     

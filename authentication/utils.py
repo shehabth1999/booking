@@ -1,4 +1,6 @@
 from django.core.mail import EmailMessage
+from django.core.mail import get_connection
+import threading
 
 
 import threading
