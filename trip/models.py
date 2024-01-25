@@ -2,11 +2,14 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from authentication.models import User
 from datetime import timedelta
+from .controller.create import Malti_Create_ALl_DBs
 
 class Area(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=30, unique=True)
-    description = models.CharField(max_length=1000, null = True)
+    id =                models.AutoField(primary_key=True)
+    name =              models.CharField(max_length=30, unique=True)
+    description =       models.CharField(max_length=1000, null = True)
+    created_at =        models.DateTimeField(auto_now_add=True)
+    objects =           Malti_Create_ALl_DBs()
     search_fields = [
        'name',
     ]
@@ -38,6 +41,8 @@ class Trip(models.Model):
     price =         models.IntegerField(null=True, blank=True)
     created_time =  models.DateTimeField(auto_now_add=True)
     updated_time =  models.DateTimeField(auto_now=True)
+    objects =       Malti_Create_ALl_DBs()
+
 
     search_fields = [
        'name',
