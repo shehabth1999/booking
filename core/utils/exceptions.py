@@ -6,7 +6,7 @@ def custom_exception_handler(exc, context):
     try:
         print("just exception handler")
         response = exception_handler(exc, context)
-        print(response)
+        print(response.json)
         if response is not None and response.status_code == 400:
             response = MainResponse().returnReponse(
                 message="عفواً الإستجابه غير متوقعه",

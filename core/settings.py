@@ -345,7 +345,7 @@ TEMPLATES = [
 # }
 
 # POSTGRES ---------------------------------------------
-DATABASE_RELEASE = {
+DATABASES = {
     'default': {
         'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
         'NAME'      : 'trip',
@@ -359,7 +359,7 @@ DATABASE_RELEASE = {
     },
     'second': {
         'ENGINE'    : 'django.db.backends.postgresql_psycopg2',
-        'NAME'      : 'trip',
+        'NAME'      : 'trip_ar',
         'USER'      : 'postgres',
         'PASSWORD'  : '7410',
         'HOST'      : 'localhost',
@@ -369,19 +369,30 @@ DATABASE_RELEASE = {
         },
     }
 }
+# settings.py
+
+from django.db import OperationalError
+
+try:
+    from django.db import connections
+    connections['default'].ensure_connection()
+except OperationalError:
+    # If the primary database connection fails, switch to the fallback database
+    DATABASES['default'] = DATABASES['second']
+
 
 # SQLITE ---------------------------------------------
-DATABASES_DEPUG = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'TEST': {
-             'MIRROR': 'default',
-        },
-    }
-}
+# DATABASES_DEPUG = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'TEST': {
+#              'MIRROR': 'default',
+#         },
+#     }
+# }
 
-DATABASE = DEBUG if DATABASES_DEPUG else DATABASE_RELEASE 
+# DATABASE = DEBUG if DATABASES_DEPUG else DATABASE_RELEASE 
 
 # endregion Database
 

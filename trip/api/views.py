@@ -8,7 +8,9 @@ from rest_framework.decorators import action
 
 
 class TripView(viewsets.ModelViewSet):
+    
     queryset = Trip.get_all()
+
     serializer_class = TripSerializer
     pagination_class =  CustomPagination
     # @action(detail=False, methods=[''])

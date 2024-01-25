@@ -29,7 +29,8 @@ class Trip(models.Model):
     )
 
     id =            models.AutoField(primary_key=True)
-    user =          models.ForeignKey(User, on_delete=models.CASCADE)
+    users =         models.ManyToManyField(User)
+    seat =          models.IntegerField(default=20)
     name =          models.CharField(max_length=30)
     description =   models.CharField(max_length=1000, null=True, blank=True)
     from_area =     models.ForeignKey(Area, on_delete=models.CASCADE, related_name='trips_from')
@@ -37,7 +38,7 @@ class Trip(models.Model):
     start_time =    models.DateTimeField()
     end_time =      models.DateTimeField()
     bus_number =    models.CharField(max_length=30)
-    status =        models.IntegerField(choices=STATUS_CHOICES)
+    status =        models.IntegerField(choices=STATUS_CHOICES, default = 1)
     price =         models.IntegerField(null=True, blank=True)
     created_time =  models.DateTimeField(auto_now_add=True)
     updated_time =  models.DateTimeField(auto_now=True)
@@ -49,12 +50,11 @@ class Trip(models.Model):
     ]
 
     list_filter = [
-        'user',
+        'users',
     ]
 
     list_display = [
         'name',
-        'user', 
         'from_area',
         'to_area',
     ]
@@ -69,6 +69,10 @@ class Trip(models.Model):
     @classmethod
     def get_all(cls):
         return cls.objects.all().order_by('id')
+    
+    @classmethod
+    def get_all_second_db(cls):
+        return cls.objects.using('second').all().order_by('id')
     
     @classmethod
     def filter_by_from_area(cls,from_area):
