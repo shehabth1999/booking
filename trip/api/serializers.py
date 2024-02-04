@@ -1,6 +1,11 @@
 from rest_framework import serializers
-from ..models import Trip, Area
+from ..models import Trip, Area, Language_Trip
 from authentication.models import User
+
+class LanguageTripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language_Trip
+        fields = ('name', 'description')
 
 class AreaSerializer(serializers.ModelSerializer):
     class Meta:

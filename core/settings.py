@@ -29,7 +29,12 @@ TIME_ZONE       = 'Africa/Cairo'        #'UTC'
 USE_I18N        = True
 USE_L10N        = True
 USE_TZ          = True
-LANGUAGES       = (  ('en', 'English'),  ('ar', 'عربى'),  )
+
+LANGUAGES       = (  ('en', 'English'),  ('ar', 'Arabic'),  ('fr', ('French')), )
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),  # Path to the locale directory
+]
 #DATETIME_FORMAT = '%Y-%m-%d %H:%m'
 # endregion Internationalization
 

@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr\n"
+
+msgid "Planned"
+msgstr "Planifié"
+
+msgid "In Progress"
+msgstr "En cours"
+
+msgid "Completed"
+msgstr "Terminé"
+
+msgid "Cancelled"
+msgstr "Annulé"
+
+msgid "Delayed"
+msgstr "En retard"
+
+msgid "On Hold"
+msgstr "En attente"
+
+msgid "Expired"
+msgstr "Expiré"

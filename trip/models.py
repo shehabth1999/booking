@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from authentication.models import User
 from datetime import timedelta
 from .controller.create import Malti_Create_ALl_DBs
+from django.utils.translation import gettext_lazy as _
 
 class Area(models.Model):
     id =                models.AutoField(primary_key=True)
@@ -15,24 +16,29 @@ class Area(models.Model):
     ]
     def __str__(self) :
         return self.name
+    
+class TripStatus(models.Model):
+    STATUS_CHOICES = (
+        (1, _("Planned")),
+        (2, _("In Progress")),
+        (3, _("Completed")),
+        (4, _("Cancelled")),
+        (5, _("Delayed")),
+        (6, _("On Hold")),
+        (7, _("Expired")),
+    )
+
+    status = models.IntegerField(choices=STATUS_CHOICES, unique=True)
+
+    def __str__(self):
+        return dict(self.STATUS_CHOICES)[self.status]    
 
 
 class Trip(models.Model):
-    STATUS_CHOICES = (
-        (1, "Planned"),
-        (2, "In Progress"),
-        (3, "Completed"),
-        (4, "Cancelled"),
-        (5, "Delayed"),
-        (6, "On Hold"),
-        (7, "Expired"),
-    )
-
+    STATUS_CHOICES = TripStatus.STATUS_CHOICES
     id =            models.AutoField(primary_key=True)
-    users =         models.ManyToManyField(User)
+    users =         models.ManyToManyField(User, null=True)
     seat =          models.IntegerField(default=20)
-    name =          models.CharField(max_length=30)
-    description =   models.CharField(max_length=1000, null=True, blank=True)
     from_area =     models.ForeignKey(Area, on_delete=models.CASCADE, related_name='trips_from')
     to_area =       models.ForeignKey(Area, on_delete=models.CASCADE, related_name='trips_to')
     start_time =    models.DateTimeField()
@@ -46,7 +52,7 @@ class Trip(models.Model):
 
 
     search_fields = [
-       'name',
+       'id',
     ]
 
     list_filter = [
@@ -54,16 +60,16 @@ class Trip(models.Model):
     ]
 
     list_display = [
-        'name',
+        'id',
         'from_area',
         'to_area',
     ]
 
     def __str__(self):
-        return self.name
+        return f'{self.pk}'
     
     @classmethod
-    def get_element_by_id(cls, pk):
+    def get_element_by_pk(cls, pk):
         return get_object_or_404(cls, pk=pk)
     
     @classmethod
@@ -104,4 +110,24 @@ class Trip(models.Model):
         date_range = (start_date, end_date + timedelta(days=1))
         return cls.objects.filter(start_time__range=date_range, end_time__range=date_range).order_by('start_time')
     
+
+class Base_Trip(models.Model):
+    LANGUAGE_CHOICES = (
+        ('ar','arabic'),
+        ('en', 'english'),
+        ('fr','french'),
+    )
+    language =      models.CharField(choices=LANGUAGE_CHOICES, default='ar', max_length=20)
+    name =          models.CharField(max_length=100)
+    description =   models.CharField(max_length=1000, null=True, blank=True)
+
+class Language_Trip(Base_Trip):
+    trip =          models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='trip_language')
     
+    def __str__(self):
+        return f'{self.trip.pk} {self.language}'
+
+class Language_Area(Base_Trip):
+    area =          models.ForeignKey(Area, on_delete=models.CASCADE, related_name='area_language')
+    def __str__(self):
+        return f'{self.area.pk} {self.language}'

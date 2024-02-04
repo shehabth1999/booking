@@ -1,0 +1,26 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar\n"
+
+msgid "Planned"
+msgstr "مخطط"
+
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+msgid "Completed"
+msgstr "مكتمل"
+
+msgid "Cancelled"
+msgstr "الغيت"
+
+msgid "Delayed"
+msgstr "تأخرت"
+
+msgid "On Hold"
+msgstr "في الانتظار"
+
+msgid "Expired"
+msgstr "انتهت"
+

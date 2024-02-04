@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-25 21:10+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\core\utils\response.py:14
+msgid "Created Successfully"
+msgstr ""
+
+#: .\core\utils\response.py:16
+msgid "Edit Successfully"
+msgstr ""
+
+#: .\core\utils\response.py:18
+msgid "Delete Successfully"
+msgstr ""
+
+#: .\core\utils\response.py:20
+msgid "Receive Successfully"
+msgstr ""
+
+msgid "Planned"
+msgstr "Planifié"
+
+msgid "In Progress"
+msgstr "En cours"
+
+msgid "Completed"
+msgstr "Terminé"
+
+msgid "Cancelled"
+msgstr "Annulé"
+
+msgid "Delayed"
+msgstr "En retard"
+
+msgid "On Hold"
+msgstr "En attente"
+
+msgid "Expired"
+msgstr "Expiré"
