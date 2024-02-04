@@ -21,6 +21,9 @@ AUTH_USER_MODEL = 'authentication.User'
 CORS_ALLOW_ALL_ORIGINS= True
 # endregion Networking
 
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": "F0kJ07EEULVAeVSfrnsVKPGB1S_BOxLw_B0TAKHe_0g",
+}
 
 
 # region Internationalization

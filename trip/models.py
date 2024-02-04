@@ -10,12 +10,19 @@ class Area(models.Model):
     name =              models.CharField(max_length=30, unique=True)
     description =       models.CharField(max_length=1000, null = True)
     created_at =        models.DateTimeField(auto_now_add=True)
+    updated_at =        models.DateTimeField(auto_now=True)
+    image =             models.ImageField(upload_to='areas', blank=True, null=True)
     objects =           Malti_Create_ALl_DBs()
     search_fields = [
        'name',
     ]
     def __str__(self) :
         return self.name
+    
+    @classmethod
+    def get_all(cls):
+        return cls.objects.all().order_by('id')
+    
     
 class TripStatus(models.Model):
     STATUS_CHOICES = (

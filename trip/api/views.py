@@ -2,10 +2,12 @@ from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from ..models import Trip ,Area ,Language_Trip
-from .serializers import TripSerializer, LanguageTripSerializer
+from .serializers import TripSerializer, LanguageTripSerializer, AreaSerializer
 from ..controller.pagination import CustomPagination
 from rest_framework.decorators import action
 from django.utils.translation import activate
+from firebase_admin import storage
+from django.views.decorators.csrf import csrf_exempt
 
 
 class TripView(viewsets.ModelViewSet):
@@ -17,10 +19,34 @@ class TripView(viewsets.ModelViewSet):
     # @action(detail=False, methods=[''])
 
 
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)
+    
+    # @action(detail=False, methods=['GET'])
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        language = kwargs.get('language', 'en')
+        activate(language)
+
+        trips = Trip.objects.all()  # Modify this queryset based on your model structure
+
+        try:
+            language_data = Language_Trip.objects.filter(language=language, trip__in=trips)
+        except Language_Trip.DoesNotExist:
+            language_data = Language_Trip.objects.filter(language='en', trip__in=trips)
+
+        trip_serializer = TripSerializer(trips, many=True)
+
+        # Serialize language_data if available, otherwise, set it to an empty list
+        language_trip_serializer = LanguageTripSerializer(language_data, many=True) if language_data else []
+
+        response_data = {
+            "trips": trip_serializer.data,
+            "language_trips": language_trip_serializer.data,
+        }
+
+        return Response(response_data)
     
 
 
@@ -28,7 +54,10 @@ class TripView(viewsets.ModelViewSet):
         language = kwargs.get('language', 'en')
         activate(language)
         instance = self.get_object()
-        language_data = Language_Trip.objects.filter(language = language, trip = instance).first()
+        try:
+            language_data = Language_Trip.objects.filter(language = language, trip = instance).first()
+        except Language_Trip.DoesNotExist:
+            language_data = Language_Trip.objects.filter(language = 'en', trip = instance).first()
         # serializer = self.get_serializer(instance)
         trip_serializer = TripSerializer(instance)
         try:
@@ -58,3 +87,24 @@ class TripView(viewsets.ModelViewSet):
             }
         }
         return Response(response_data)
+    
+
+class AreaView(viewsets.ModelViewSet):
+
+    queryset = Area.get_all()
+    serializer_class = AreaSerializer
+    pagination_class =  CustomPagination
+
+from django.http import JsonResponse
+
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST' and request.FILES['image']:
+        uploaded_file = request.FILES['image']
+
+        # Upload file to Firebase Storage
+        bucket = storage.bucket()
+        blob = bucket.blob(uploaded_file.name)
+        blob.upload_from_file(uploaded_file)
+        # Area.objects.create(image=uploaded_file, name="apii", description="apii test")
+        return JsonResponse({'success':"success"})
