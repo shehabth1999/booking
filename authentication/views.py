@@ -22,8 +22,22 @@ from django.shortcuts import redirect
 from django.http import HttpResponsePermanentRedirect
 import os
 from rest_framework.permissions import AllowAny
+import pyrebase
 
 
+firebaseConfig = {
+  'apiKey': "AIzaSyC6biSBny25z-G2dV-W02FX7oVQLSenf14",
+  'authDomain': "booking-c4e6b.firebaseapp.com",
+  'projectId': "booking-c4e6b",
+  'storageBucket': "booking-c4e6b.appspot.com",
+  'messagingSenderId': "716087174176",
+  'appId': "1:716087174176:web:531e27250db2102cfd0845",
+  'measurementId': "G-X7E82GJZ1N",
+  "databaseURL":'https://booking-c4e6b-default-rtdb.europe-west1.firebasedatabase.app/',
+}
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+authe = firebase.auth()
 
 class CustomRedirect(HttpResponsePermanentRedirect):
 
@@ -54,6 +68,12 @@ class RegisterView(generics.GenericAPIView):
                 'email_subject': 'Verify your email'}
 
         Util.send_email(data)
+        # to register in fire base and back with user id 
+        firebase_user = authe.create_user_with_email_and_password(user_data['email'], request.POST['password'])
+        uid = firebase_user['localId']
+        user.firebase_id = uid
+        user.save()
+        
         return Response(user_data, status=status.HTTP_201_CREATED)
 
 
@@ -86,6 +106,10 @@ class LoginAPIView(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        # to login in  fire base and back with user data
+        firebase_user = authe.sign_in_with_email_and_password(serializer.validated_data['email'], request.POST['password'])
+        session_id = firebase_user['idToken']
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

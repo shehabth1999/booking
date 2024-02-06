@@ -106,5 +106,4 @@ def upload_file(request):
         bucket = storage.bucket()
         blob = bucket.blob(uploaded_file.name)
         blob.upload_from_file(uploaded_file)
-        # Area.objects.create(image=uploaded_file, name="apii", description="apii test")
         return JsonResponse({'success':"success"})

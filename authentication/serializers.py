@@ -146,3 +146,14 @@ class LogoutSerializer(serializers.Serializer):
 
         except TokenError:
             self.fail('bad_token')
+
+
+
+class SignInSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+class SignUpSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    name = serializers.CharField()
